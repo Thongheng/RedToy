@@ -1,67 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FF4D4D" />
-    <meta name="description" content="A playful yet powerful Red Team cheatsheet powered by Gemini AI." />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <title>RedToy Cheatsheet</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Nunito', 'sans-serif'],
-              mono: ['JetBrains Mono', 'monospace'],
-            },
-            colors: {
-              toy: {
-                red: '#FF4D4D',
-                darkRed: '#C0392B',
-                bg: '#FFF5F5',
-                darkBg: '#1a1a1a',
-                cardDark: '#2d2d2d',
-                border: '#000000',
-              }
-            },
-            boxShadow: {
-              'hard': '4px 4px 0px 0px #000000',
-              'hard-sm': '2px 2px 0px 0px #000000',
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FF4D4D" />
+  <meta name="description" content="A playful yet powerful Red Team cheatsheet powered by Gemini AI." />
+  <link rel="apple-touch-icon" href="public/apple-touch-icon.png">
+  <title>RedToy Cheatsheet</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            toy: {
+              red: '#FF4D4D',
+              darkRed: '#C0392B',
+              bg: '#FFF5F5',
+              darkBg: '#1a1a1a',
+              cardDark: '#2d2d2d',
+              border: '#000000',
             }
+          },
+          boxShadow: {
+            'hard': '4px 4px 0px 0px #000000',
+            'hard-sm': '2px 2px 0px 0px #000000',
           }
         }
       }
-    </script>
-    <style>
-      body {
-        font-family: 'Nunito', sans-serif;
-      }
-      /* Custom scrollbar for toy feel */
-      ::-webkit-scrollbar {
-        width: 12px;
-        height: 12px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-left: 2px solid black;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #FF4D4D;
-        border: 2px solid black;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #C0392B;
-      }
-      .dark ::-webkit-scrollbar-track {
-        background: #2d2d2d;
-        border-left: 2px solid black;
-      }
-    </style>
-<script type="importmap">
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+    }
+
+    /* Custom scrollbar for toy feel */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-left: 2px solid black;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #FF4D4D;
+      border: 2px solid black;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C0392B;
+    }
+
+    .dark ::-webkit-scrollbar-track {
+      background: #2d2d2d;
+      border-left: 2px solid black;
+    }
+  </style>
+  <script type="importmap">
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
@@ -75,10 +83,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>

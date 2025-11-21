@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
       react(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+        includeAssets: ['public/favicon.ico', 'public/apple-touch-icon.png', 'public/mask-icon.svg'],
         manifest: {
           name: 'RedTeam Cheatsheet',
           short_name: 'RedToy',
@@ -24,23 +24,23 @@ export default defineConfig(({ mode }) => {
           start_url: '/',
           icons: [
             {
-              src: 'pwa-192x192.png',
+              src: 'public/pwa-192x192.png',
               sizes: '192x192',
               type: 'image/png'
             },
             {
-              src: 'pwa-512x512.png',
+              src: 'public/pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png'
             },
             {
-              src: 'pwa-512x512.png',
+              src: 'public/pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any'
             },
             {
-              src: 'pwa-512x512.png',
+              src: 'public/pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'maskable'
@@ -51,7 +51,7 @@ export default defineConfig(({ mode }) => {
     ],
     // This ensures your repository name is handled correctly if deployed to a subpath
     // Change '/your-repo-name/' to './' for relative paths or your actual repo name
-    base: './', 
+    base: './',
     define: {
       // This allows 'process.env.API_KEY' to work in the client-side code
       'process.env.API_KEY': JSON.stringify(env.API_KEY)

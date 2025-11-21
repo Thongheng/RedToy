@@ -12,6 +12,20 @@ export default defineConfig(({ mode }) => {
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+        workbox: {
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+          skipWaiting: true,
+          // Exclude index.html from precache to ensure we always fetch the latest version from network
+          globIgnores: ['**/index.html'],
+          runtimeCaching: [
+            {
+              // Force the browser to go to the network for the index.html
+              urlPattern: ({ request }) => request.mode === 'navigate',
+              handler: 'NetworkOnly',
+            }
+          ]
+        },
         manifest: {
           name: 'RedToy',
           short_name: 'RedToy',

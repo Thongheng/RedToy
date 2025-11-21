@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
         manifest: {
-          name: 'RedTeam Cheatsheet',
+          name: 'RedToy',
           short_name: 'RedToy',
           description: 'A playful Red Team cheatsheet powered by Gemini AI',
           theme_color: '#FF4D4D',

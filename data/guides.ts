@@ -44,5 +44,33 @@ ios keychain dump
 
 # Step 4: Bypass SSL Pinning
 ios sslpinning disable`
+    },
+    {
+        id: 'python_interactive_shell',
+        name: 'Python',
+        category: 'GUIDE',
+        subcategory: 'Interactive Shell',
+        desc: 'Basic usage of the Python interactive shell.',
+        content: `# Launch Python Interactive Shell
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+
+# CTRL+Z to background the shell and return to your terminal 
+stty raw -echo;fg 
+
+# Set terminal type
+export TERM=xterm`
+    },
+    {
+        id: 'script_utility_interactive_shell',
+        name: 'Script Utility',
+        category: 'GUIDE',
+        subcategory: 'Interactive Shell',
+        desc: 'Using Script Utility to create interactive shells.',
+        content: `# Launch Interactive Shell with Script Utility
+script /dev/null -c /bin/bash
+
+# CTRL+Z to background the shell and return to your terminal 
+stty raw -echo;fg 
+`
     }
 ];

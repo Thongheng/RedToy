@@ -21,7 +21,7 @@ export const createArg = {
 };
 
 // --- Common Args Definitions ---
-const ARG_HTTPS = createArg.toggle('useHttps', 'Use HTTPS', true);
+const ARG_HTTPS = createArg.toggle('useHttps', 'Use HTTPS', false);
 const ARG_OUTPUT = createArg.toggle('saveOutput', 'Save Output', false);
 const ARG_CREDS = createArg.toggle('useCreds', 'Credentials', false);
 
@@ -141,10 +141,10 @@ export const TOOLS: Tool[] = [
     },
 
     {
-        id: 'lftp',
-        name: 'LFTP',
+        id: 'ftp',
+        name: 'FTP',
         category: 'OTHER',
-        subcategory: 'FTP',
+        subcategory: 'Remote Access',
         desc: 'Sophisticated file transfer program.',
         authMode: 'required',
         generate: (v, args) => {
@@ -152,29 +152,27 @@ export const TOOLS: Tool[] = [
         }
     },
     {
-        id: 'sshpass',
-        name: 'SSHPass',
+        id: 'ssh',
+        name: 'SSH',
         category: 'OTHER',
-        subcategory: 'SSH',
+        subcategory: 'Remote Access',
         desc: 'Non-interactive ssh password provider.',
         authMode: 'required',
         generate: (v, args) => {
-            return `sshpass -p '${v.password || '$PASSWORD'}' ssh ${v.username || '$USERNAME'}@${v.target || '$TARGET'}`;
+            return `sshpass -p '${v.password || '$PASSWORD'}' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${v.username || '$USERNAME'}@${v.target || '$TARGET'}`;
         }
     },
     {
-        id: 'xfreerdp',
-        name: 'xFreeRDP',
+        id: 'RDP',
+        name: 'RDP',
         category: 'OTHER',
-        subcategory: 'RDP',
+        subcategory: 'Remote Access',
         desc: 'RDP Client.',
         authMode: 'required',
-        args: [ARG_WL_DIR],
         generate: (v, args) => {
-            return `xfreerdp3 /v:${v.target || '$TARGET'} +clipboard /dynamic-resolution /drive:share,${args.wordlistDir || '$current_dir'} /u:${v.username || '$USERNAME'} /p:'${v.password || '$PASSWORD'}'`;
+            return `xfreerdp3 /v:${v.target || '$TARGET'} +clipboard /dynamic-resolution /drive:share,$current_dir /u:${v.username || '$USERNAME'} /p:'${v.password || '$PASSWORD'}'`;
         }
     },
-
     {
         id: 'nmap',
         name: 'Nmap',
@@ -187,8 +185,6 @@ export const TOOLS: Tool[] = [
         ],
         generate: (v, args) => {
             const proto = args.udp ? '-sU' : '';
-            const sv = args.serviceVersion ? '-sV' : '';
-            const sc = args.scripts ? '-sC' : '';
             return `nmap ${proto} -sV -sC -Pn -v ${v.target || '$TARGET'}`;
         }
     },
@@ -324,10 +320,10 @@ export const TOOLS: Tool[] = [
         }
     },
     {
-        id: 'httpx_single',
-        name: 'Httpx (Single)',
+        id: 'httpx',
+        name: 'Httpx',
         category: 'WEB',
-        subcategory: 'HTTP Probing',
+        subcategory: 'Fingerprinting',
         desc: 'HTTP toolkit for single target.',
         authMode: 'none',
         args: [ARG_HTTPS],
@@ -337,10 +333,10 @@ export const TOOLS: Tool[] = [
         }
     },
     {
-        id: 'gowitness_single',
-        name: 'Gowitness (Single)',
+        id: 'gowitness',
+        name: 'Gowitness',
         category: 'WEB',
-        subcategory: 'Screenshots',
+        subcategory: 'Fingerprinting',
         desc: 'Screenshot utility.',
         authMode: 'none',
         args: [ARG_HTTPS],
@@ -367,8 +363,8 @@ export const TOOLS: Tool[] = [
     {
         id: 'nuclei',
         name: 'Nuclei',
-        category: 'EXPLOIT',
-        subcategory: 'Scanning',
+        category: 'WEB',
+        subcategory: 'Fingerprinting',
         desc: 'Vulnerability scanner.',
         authMode: 'none',
         args: [ARG_HTTPS, ARG_OUTPUT],
@@ -378,20 +374,6 @@ export const TOOLS: Tool[] = [
             let cmd = `nuclei -u ${prefix}${targetWithPort}`;
             if (args.saveOutput) cmd += ` -o nuclei_vulns.txt`;
             return cmd;
-        }
-    },
-    {
-        id: 'zaproxy',
-        name: 'Zaproxy',
-        category: 'EXPLOIT',
-        subcategory: 'Scanning',
-        desc: 'OWASP ZAP automated scan.',
-        authMode: 'none',
-        args: [ARG_HTTPS],
-        generate: (v, args) => {
-            const prefix = getUrlPrefix(args.useHttps);
-            const targetWithPort = formatTargetWithPort(v.target, v.port);
-            return `zaproxy -cmd -quickurl ${prefix}${targetWithPort}`;
         }
     },
 ];

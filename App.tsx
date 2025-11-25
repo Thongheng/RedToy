@@ -4,7 +4,7 @@ import { CATEGORIES, TOOLS, REFERENCES, GUIDES, ENABLE_AI } from './constants';
 import { GlobalInputs, Theme, ToolArg } from './types';
 import { ThemeToggle } from './components/ThemeToggle';
 import { GeminiModal } from './components/GeminiModal';
-import { ChevronDown, ChevronRight, Copy, Check, Terminal as TerminalIcon, Search, Wand2, ExternalLink, BookOpen, Map as MapIcon, Settings as SettingsIcon, Menu, X, Bot, Home } from 'lucide-react';
+import { ChevronDown, ChevronRight, Copy, Check, Terminal as TerminalIcon, Search, ExternalLink, BookOpen, Map as MapIcon, Settings as SettingsIcon, Menu, X, Bot } from 'lucide-react';
 
 // Define the explicit order for the sidebar
 const CATEGORY_ORDER = ['SERVICE', 'WEB', 'WINDOWS', 'AD', 'OTHER', 'EXPLOIT', 'GUIDE', 'REF'];

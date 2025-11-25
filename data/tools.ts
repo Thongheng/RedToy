@@ -3,14 +3,14 @@ import { Tool, ToolArg } from '../types';
 
 // --- Helpers ---
 
-export const getUrlPrefix = (isHttps: boolean) => isHttps ? 'https://' : 'http://';
+const getUrlPrefix = (isHttps: boolean) => isHttps ? 'https://' : 'http://';
 
-export const formatTargetWithPort = (target: string) => {
+const formatTargetWithPort = (target: string) => {
     return target || '$TARGET';
 };
 
 // Helper to create arguments easily
-export const createArg = {
+const createArg = {
     toggle: (key: string, label: string, defaultValue: boolean = false): ToolArg => ({
         key, type: 'toggle', label, defaultValue
     }),

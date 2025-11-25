@@ -50,20 +50,20 @@ export const REFERENCES: ReferenceItem[] = [
         url: 'https://lolbas-project.github.io/'
     },
     {
+        id: 'payloads_all_things',
+        name: 'Payloads All The Things',
+        category: 'REF',
+        subcategory: 'Application',
+        desc: 'A list of useful payloads and bypasses for Web Application Security.',
+        url: 'https://swisskyrepo.github.io/PayloadsAllTheThings/'
+    },
+    {
         id: 'hacktricks',
         name: 'HackTricks',
         category: 'REF',
         subcategory: 'General',
         desc: 'A massive wiki of All in One hacking tricks and techniques',
         url: 'https://book.hacktricks.wiki/en/index.html'
-    },
-    {
-        id: 'payloads_all_things',
-        name: 'Payloads All The Things',
-        category: 'REF',
-        subcategory: 'General',
-        desc: 'A list of useful payloads and bypasses for Web Application Security.',
-        url: 'https://swisskyrepo.github.io/PayloadsAllTheThings/'
     },
     {
         id: 'cyberchef',
@@ -88,5 +88,13 @@ export const REFERENCES: ReferenceItem[] = [
         subcategory: 'General',
         desc: 'Cipher Identifier is a web app for encryption, encoding, compression and data analysis.',
         url: 'https://www.dcode.fr/cipher-identifier'
+    },
+    {
+        id: 'ctf_guide',
+        name: 'CTF Guide',
+        category: 'REF',
+        subcategory: 'General',
+        desc: 'A big collection of my notes for Capture The Flag (CTF) challenges and Hacking Techniques',
+        url: 'https://book.jorianwoltjer.com/'
     }
 ];

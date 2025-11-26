@@ -187,6 +187,24 @@ export const TOOLS: Tool[] = [
         }
     },
     {
+        id: 'bash',
+        name: 'Bash',
+        category: 'OTHER',
+        subcategory: 'File Transfer',
+        desc: 'Bash built-in file transfer',
+        authMode: 'none',
+        args: [
+
+        ],
+        generate: (v, args) => {
+            return `# Sender
+nc -lvnp 8000 < ${v.filepath || '$FILEPATH'}
+
+# Receiver
+nc -q 0 ${v.target || '$TARGET'} 8000 > ${v.filepath || '$FILEPATH'}`;
+        }
+    },
+    {
         id: 'impacket-smb',
         name: 'Impacket SMB Server',
         category: 'OTHER',

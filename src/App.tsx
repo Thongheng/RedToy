@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import type { GlobalInputs } from './types';
@@ -7,6 +7,7 @@ import GuidesPage from './pages/Guides';
 import ReferencesPage from './pages/References';
 import ToolsLayout from './layouts/ToolsLayout';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { CommandPalette } from './components/CommandPalette';
 import './index.css';
 
 function App() {
@@ -51,8 +52,7 @@ function App() {
                                 </svg>
                             </div>
                             <div className="flex items-baseline gap-1.5">
-                                <span className="text-xl font-black tracking-tighter">RedSploit</span>
-                                <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">V2</span>
+                                <span className="text-xl font-black tracking-tighter">HackToy</span>
                             </div>
                         </div>
 
@@ -119,6 +119,11 @@ function App() {
                     </ErrorBoundary>
                 </main>
             </div>
+
+            <CommandPalette onSelectTool={(toolId, category) => {
+                navigate(`/tools/${category}/${toolId}`);
+                clearSearch();
+            }} />
         </div>
     );
 }

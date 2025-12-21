@@ -1,17 +1,7 @@
 import React from 'react';
-import { Copy, Check } from 'lucide-react';
-import { useClipboard } from '../../hooks/useClipboard';
+import { PayloadBlock } from '../ui/PayloadBlock';
 
 export default function SQLTool() {
-    const { copied, copy } = useClipboard();
-    const [copiedId, setCopiedId] = React.useState<string>('');
-
-    const handleCopy = (text: string, id: string) => {
-        copy(text);
-        setCopiedId(id);
-        setTimeout(() => setCopiedId(''), 2000);
-    };
-
     // Original HackTools payload data
     const DbColumnNumber = [
         {
@@ -23,8 +13,7 @@ export default function SQLTool() {
             title: "'UNION SELECT NULL,NULL,NULL FROM DUAL -- -",
         },
         {
-            db_type:
-                "MYSQL/MSSQL/PGSQL/ORACLE  - (add +1 until you get an exception)",
+            db_type: "MYSQL/MSSQL/PGSQL/ORACLE  - (add +1 until you get an exception)",
             title: "' UNION ORDER BY 1 -- -",
         },
     ];
@@ -143,31 +132,15 @@ export default function SQLTool() {
         },
     ];
 
-    const PayloadSection = ({ title, items }: { title: string; items: Array<{ db_type?: string; title: string }> }) => (
-        <div className="mb-6">
-            <h3 className="text-lg font-bold text-[#a2ff00] mb-3">{title}</h3>
-            {items.map((item, i) => (
-                <div key={i} className="mb-4">
-                    {item.db_type && (
-                        <div className="text-xs font-semibold text-gray-400 mb-1">{item.db_type}</div>
-                    )}
-                    <div className="htb-terminal-content flex items-start gap-2">
-                        <pre className="flex-1 font-mono text-sm text-gray-200 whitespace-pre-wrap">{item.title}</pre>
-                        <button
-                            onClick={() => handleCopy(item.title, `${title}-${i}`)}
-                            className="flex-shrink-0 p-2 rounded hover:bg-white/5 transition-colors"
-                        >
-                            {copiedId === `${title}-${i}` ? (
-                                <Check size={16} className="text-[#a2ff00]" />
-                            ) : (
-                                <Copy size={16} className="text-gray-400" />
-                            )}
-                        </button>
-                    </div>
-                </div>
-            ))}
-        </div>
-    );
+    // Helper to format grouped content
+    const formatGrouped = (items: Array<{ db_type?: string; title: string }>) => {
+        return items.map(item => {
+            if (item.db_type) {
+                return `# ${item.db_type}\n${item.title}`;
+            }
+            return item.title;
+        }).join('\n\n');
+    };
 
     return (
         <div className="animate-fade-in">
@@ -182,16 +155,51 @@ export default function SQLTool() {
                 </p>
             </div>
 
-            <div className="space-y-8">
-                <PayloadSection title="Number of Columns" items={DbColumnNumber} />
-                <PayloadSection title="Database Version Enumeration" items={DbVersionEnumeration} />
-                <PayloadSection title="Table Name Enumeration" items={DbTableEnumeration} />
-                <PayloadSection title="Column Name Enumeration" items={DbColumnEnumeration} />
-                <PayloadSection title="Column Values Concatenation" items={DbColValueConcatenation} />
-                <PayloadSection title="Conditional (Error Based)" items={DbConditionalErrors} />
-                <PayloadSection title="Time-Based" items={TimeBased} />
-                <PayloadSection title="Authentication Based Payloads" items={AuthBased} />
-                <PayloadSection title="Order By and UNION Based Payloads" items={OrderUnion} />
+            <div className="space-y-6">
+                <PayloadBlock
+                    title="Number of Columns"
+                    content={formatGrouped(DbColumnNumber)}
+                />
+
+                <PayloadBlock
+                    title="Database Version Enumeration"
+                    content={formatGrouped(DbVersionEnumeration)}
+                />
+
+                <PayloadBlock
+                    title="Table Name Enumeration"
+                    content={formatGrouped(DbTableEnumeration)}
+                />
+
+                <PayloadBlock
+                    title="Column Name Enumeration"
+                    content={formatGrouped(DbColumnEnumeration)}
+                />
+
+                <PayloadBlock
+                    title="Column Values Concatenation"
+                    content={formatGrouped(DbColValueConcatenation)}
+                />
+
+                <PayloadBlock
+                    title="Conditional (Error Based)"
+                    content={formatGrouped(DbConditionalErrors)}
+                />
+
+                <PayloadBlock
+                    title="Time-Based"
+                    content={formatGrouped(TimeBased)}
+                />
+
+                <PayloadBlock
+                    title="Authentication Based Payloads"
+                    content={formatGrouped(AuthBased)}
+                />
+
+                <PayloadBlock
+                    title="Order By and UNION Based Payloads"
+                    content={formatGrouped(OrderUnion)}
+                />
             </div>
         </div>
     );

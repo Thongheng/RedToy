@@ -1,4 +1,5 @@
 import { Copy } from 'lucide-react';
+import { Card, Button, PayloadBlock } from '../ui';
 import { useClipboard } from '../../hooks/useClipboard';
 
 export default function WindowsHostEnumTool() {
@@ -33,63 +34,21 @@ export default function WindowsHostEnumTool() {
             </div>
 
             {/* System Information */}
-            <div className="htb-card">
+            <Card className="!p-6">
                 <h3 className="text-lg font-bold text-[#a2ff00] mb-4">System Information Gathering</h3>
                 <p className="text-gray-400 text-sm mb-4">Commands to retrieve system information</p>
-                <div className="space-y-3">
-                    {systemCommands.map((item, idx) => (
-                        <div key={idx} className="border-b border-white/5 last:border-0 pb-3 last:pb-0">
-                            <div className="flex items-start justify-between gap-3 mb-2">
-                                <div className="flex-1">
-                                    <span className="text-sm font-bold text-white">{item.name}</span>
-                                    <p className="text-xs text-gray-400 mt-1">{item.desc}</p>
-                                </div>
-                                <button
-                                    onClick={() => copy(item.cmd)}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#a2ff00]/10 hover:bg-[#a2ff00]/20 text-[#a2ff00] text-xs font-bold transition-colors flex-shrink-0"
-                                >
-                                    <Copy size={12} />
-                                    {copied ? 'Copied!' : 'Copy'}
-                                </button>
-                            </div>
-                            <div className="htb-terminal-content">
-                                <pre className="font-mono text-xs text-gray-300 whitespace-pre-wrap break-all">
-                                    {item.cmd}
-                                </pre>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+                <PayloadBlock
+                    content={systemCommands.map(item => `# ${item.name} - ${item.desc}\n${item.cmd}`).join('\n\n')}
+                />
+            </Card>
 
             {/* Network Information */}
-            <div className="htb-card">
+            <Card className="!p-6">
                 <h3 className="text-lg font-bold text-[#a2ff00] mb-4">Network Information Gathering</h3>
-                <div className="space-y-3">
-                    {networkCommands.map((item, idx) => (
-                        <div key={idx} className="border-b border-white/5 last:border-0 pb-3 last:pb-0">
-                            <div className="flex items-start justify-between gap-3 mb-2">
-                                <div className="flex-1">
-                                    <span className="text-sm font-bold text-white">{item.name}</span>
-                                    <p className="text-xs text-gray-400 mt-1">{item.desc}</p>
-                                </div>
-                                <button
-                                    onClick={() => copy(item.cmd)}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#a2ff00]/10 hover:bg-[#a2ff00]/20 text-[#a2ff00] text-xs font-bold transition-colors flex-shrink-0"
-                                >
-                                    <Copy size={12} />
-                                    {copied ? 'Copied!' : 'Copy'}
-                                </button>
-                            </div>
-                            <div className="htb-terminal-content">
-                                <pre className="font-mono text-xs text-gray-300 whitespace-pre-wrap break-all">
-                                    {item.cmd}
-                                </pre>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+                <PayloadBlock
+                    content={networkCommands.map(item => `# ${item.name} - ${item.desc}\n${item.cmd}`).join('\n\n')}
+                />
+            </Card>
         </div>
     );
 }

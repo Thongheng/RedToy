@@ -1,4 +1,5 @@
 import { Copy } from 'lucide-react';
+import { Card, Button, PayloadBlock } from '../ui';
 import { useClipboard } from '../../hooks/useClipboard';
 
 export default function NoSQLTool() {
@@ -70,33 +71,15 @@ export default function NoSQLTool() {
             </div>
 
             {payloads.map((section, idx) => (
-                <div key={idx} className="htb-card">
+                <Card key={idx} className="!p-6">
                     <h3 className="text-lg font-bold text-[#a2ff00] mb-4">{section.category}</h3>
-                    <div className="space-y-3">
-                        {section.items.map((item, itemIdx) => (
-                            <div key={itemIdx} className="border-b border-white/5 last:border-0 pb-3 last:pb-0">
-                                <div className="flex items-start justify-between gap-3 mb-2">
-                                    <span className="text-sm font-bold text-white">{item.name}</span>
-                                    <button
-                                        onClick={() => copy(item.payload)}
-                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#a2ff00]/10 hover:bg-[#a2ff00]/20 text-[#a2ff00] text-xs font-bold transition-colors flex-shrink-0"
-                                    >
-                                        <Copy size={12} />
-                                        {copied ? 'Copied!' : 'Copy'}
-                                    </button>
-                                </div>
-                                <div className="htb-terminal-content">
-                                    <pre className="font-mono text-xs text-gray-300 whitespace-pre-wrap break-all">
-                                        {item.payload}
-                                    </pre>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                    <PayloadBlock
+                        content={section.items.map(item => `# ${item.name}\n${item.payload}`).join('\n\n')}
+                    />
+                </Card>
             ))}
 
-            <div className="htb-card bg-blue-500/10 border-blue-500/20">
+            <Card className="bg-blue-500/10 border-blue-500/20">
                 <h3 className="text-sm font-bold text-blue-300 mb-2">💡 Testing Tips</h3>
                 <ul className="text-xs text-gray-300 space-y-1.5">
                     <li>• Test both JSON and URL-encoded formats</li>
@@ -104,9 +87,9 @@ export default function NoSQLTool() {
                     <li>• Try operator injection in login forms (username[$ne]=)</li>
                     <li>• Use regex for character-by-character data extraction</li>
                     <li>• Test $where clauses for JavaScript execution</li>
-                    <li>• Check if input validation strips $ or { } characters</li>
+                    <li>• Check if input validation strips $ or {`{ }`} characters</li>
                 </ul>
-            </div>
+            </Card>
         </div>
     );
 }

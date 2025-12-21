@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, TabNav } from '../ui';
+import { Card, Button, TabNav, PayloadBlock } from '../ui';
 import { Terminal, Copy, Check, Shield } from 'lucide-react';
 
 export default function PowerShellTool() {
@@ -134,23 +134,15 @@ $Result = $Searcher.FindAll()`
                     <p className="text-sm text-gray-400">
                         Local system reconnaissance and credential harvesting commands
                     </p>
-                    {SYSTEM_ENUM.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.title}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono break-all">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <PayloadBlock
+                        content={SYSTEM_ENUM.map(item => `# ${item.title}\n${item.cmd}`).join('\n\n')}
+                    />
                 </div>
             )}
 
             {/* Active Directory Tab */}
             {activeTab === 'ad' && (
-                <div className="space-y-4">
+                <div className="space-y-6">
                     <Card className="!p-6 bg-yellow-500/10 border-yellow-500/20">
                         <div className="flex items-start gap-3">
                             <Shield className="text-yellow-500 mt-1" size={20} />
@@ -164,116 +156,64 @@ $Result = $Searcher.FindAll()`
                         </div>
                     </Card>
 
-                    <h3 className="text-lg font-bold text-white">Domain Enumeration</h3>
-                    {AD_ENUM.domain.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.title}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Domain Enumeration</h3>
+                        <PayloadBlock
+                            content={AD_ENUM.domain.map(item => `# ${item.title}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Computer Enumeration</h3>
-                    {AD_ENUM.computers.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.title}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Computer Enumeration</h3>
+                        <PayloadBlock
+                            content={AD_ENUM.computers.map(item => `# ${item.title}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Admin Groups & Accounts</h3>
-                    {AD_ENUM.admins.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.title}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Admin Groups & Accounts</h3>
+                        <PayloadBlock
+                            content={AD_ENUM.admins.map(item => `# ${item.title}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">GPO Enumeration</h3>
-                    {AD_ENUM.gpo.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.title}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">GPO Enumeration</h3>
+                        <PayloadBlock
+                            content={AD_ENUM.gpo.map(item => `# ${item.title}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Password Enumeration</h3>
-                    {AD_ENUM.passwords.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.title}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Password Enumeration</h3>
+                        <PayloadBlock
+                            content={AD_ENUM.passwords.map(item => `# ${item.title}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">ACL Enumeration</h3>
-                    {AD_ENUM.acl.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.title}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">ACL Enumeration</h3>
+                        <PayloadBlock
+                            content={AD_ENUM.acl.map(item => `# ${item.title}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">AD Scripts</h3>
-                    {AD_ENUM.scripts.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.title}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3 max-h-64 overflow-y-auto">
-                                <pre className="text-xs text-blue-300 font-mono whitespace-pre-wrap">{item.cmd}</pre>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">AD Scripts</h3>
+                        <PayloadBlock
+                            content={AD_ENUM.scripts.map(item => `# ${item.title}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
                 </div>
             )}
 
             {/* AMSI Bypass Tab */}
             {activeTab === 'amsi' && (
                 <div className="space-y-4">
-                    <Card className="!p-6">
-                        <h3 className="text-lg font-bold text-htb-green mb-4">AMSI / ETW Bypass</h3>
-                        <p className="text-sm text-gray-400 mb-4">
-                            Obfuscated PowerShell command to bypass Antimalware Scan Interface (AMSI) detection
-                        </p>
-                        <div className="bg-[#0d1117] rounded-lg p-4 max-h-96 overflow-y-auto">
-                            <pre className="text-xs text-blue-300 font-mono whitespace-pre-wrap">{AMSI_BYPASS}</pre>
-                        </div>
-                        <div className="flex gap-2 mt-4">
-                            <Button variant="primary" onClick={() => copyToClipboard(AMSI_BYPASS)} icon={<Copy size={14} />}>
-                                Copy
-                            </Button>
-                        </div>
-                    </Card>
+                    <PayloadBlock
+                        title="AMSI / ETW Bypass"
+                        content={AMSI_BYPASS}
+                    />
                 </div>
             )}
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, TabNav } from '../ui';
+import { Card, Button, TabNav, PayloadBlock } from '../ui';
 import { Terminal, Copy, Check } from 'lucide-react';
 
 export default function LinuxEnumTool() {
@@ -125,20 +125,15 @@ export default function LinuxEnumTool() {
                         <p className="text-sm text-gray-400 mb-4">
                             Upgrade a basic shell to a fully interactive TTY shell with tab completion and Ctrl+C support
                         </p>
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                             {TTY_STABILIZATION.map((item, idx) => (
                                 <div key={idx} className="flex items-start gap-3">
-                                    <div className="bg-blue-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <div className="bg-blue-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mt-2">
                                         {idx + 1}
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-xs text-gray-400 mb-1">{item.step}</p>
-                                        <div className="flex items-center gap-2">
-                                            <code className="text-xs text-blue-300 bg-[#0d1117] rounded px-3 py-2 flex-1">
-                                                {item.cmd}
-                                            </code>
-                                            <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                                        </div>
+                                        <p className="text-xs text-gray-400 mb-1 font-bold">{item.step}</p>
+                                        <PayloadBlock content={item.cmd} />
                                     </div>
                                 </div>
                             ))}
@@ -146,139 +141,77 @@ export default function LinuxEnumTool() {
                     </Card>
 
                     <h3 className="text-lg font-bold text-white">TTY Spawn Methods</h3>
-                    {TTY_METHODS.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.title}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono break-all">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <PayloadBlock
+                        content={TTY_METHODS.map(item => `# ${item.title}\n${item.cmd}`).join('\n\n')}
+                    />
                 </div>
             )}
 
             {/* Enumeration Tab */}
             {activeTab === 'enum' && (
-                <div className="space-y-4">
-                    <h3 className="text-lg font-bold text-white">SUID / Capabilities</h3>
-                    {LINUX_ENUM.suid.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.desc}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono break-all">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                <div className="space-y-6">
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">SUID / Capabilities</h3>
+                        <PayloadBlock
+                            content={LINUX_ENUM.suid.map(item => `# ${item.desc}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">System Version</h3>
-                    {LINUX_ENUM.system.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.desc}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">System Version</h3>
+                        <PayloadBlock
+                            content={LINUX_ENUM.system.map(item => `# ${item.desc}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Kernel Information</h3>
-                    {LINUX_ENUM.kernel.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.desc}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Kernel Information</h3>
+                        <PayloadBlock
+                            content={LINUX_ENUM.kernel.map(item => `# ${item.desc}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Environment Variables</h3>
-                    {LINUX_ENUM.env.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.desc}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Environment Variables</h3>
+                        <PayloadBlock
+                            content={LINUX_ENUM.env.map(item => `# ${item.desc}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Service Configurations</h3>
-                    {LINUX_ENUM.services.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.desc}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono break-all">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Service Configurations</h3>
+                        <PayloadBlock
+                            content={LINUX_ENUM.services.map(item => `# ${item.desc}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Cron Jobs</h3>
-                    {LINUX_ENUM.cron.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.desc}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Cron Jobs</h3>
+                        <PayloadBlock
+                            content={LINUX_ENUM.cron.map(item => `# ${item.desc}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Network & Users</h3>
-                    {LINUX_ENUM.network.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.desc}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Network & Users</h3>
+                        <PayloadBlock
+                            content={LINUX_ENUM.network.map(item => `# ${item.desc}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Port Forwarding</h3>
-                    {LINUX_ENUM.forwarding.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.desc}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono break-all">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Port Forwarding</h3>
+                        <PayloadBlock
+                            content={LINUX_ENUM.forwarding.map(item => `# ${item.desc}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
 
-                    <h3 className="text-lg font-bold text-white">Privilege Escalation</h3>
-                    {LINUX_ENUM.privesc.map((item, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-bold text-htb-green">{item.desc}</span>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(item.cmd)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <code className="text-xs text-blue-300 font-mono break-all">{item.cmd}</code>
-                            </div>
-                        </Card>
-                    ))}
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-3">Privilege Escalation</h3>
+                        <PayloadBlock
+                            content={LINUX_ENUM.privesc.map(item => `# ${item.desc}\n${item.cmd}`).join('\n\n')}
+                        />
+                    </div>
                 </div>
             )}
 

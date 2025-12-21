@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Copy, Check, AlertTriangle } from 'lucide-react';
+import { Card } from '../ui';
 import { useClipboard } from '../../hooks/useClipboard';
 
 // Original HackTools conversion mappings
@@ -166,7 +167,7 @@ export default function PHPFilterChainTool() {
             </div>
 
             {chainOutput && (
-                <div className="htb-card">
+                <Card>
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                             <h3 className="text-sm font-bold text-[#a2ff00]">
@@ -206,12 +207,12 @@ export default function PHPFilterChainTool() {
                         </div>
                     )}
 
-                    <div className="htb-terminal-content">
-                        <pre className="font-mono text-xs text-gray-300 whitespace-pre-wrap break-all">
+                    <div className="bg-[#0d1117] rounded p-3">
+                        <code className="text-xs text-blue-300 font-mono break-all">
                             {chainOutput}
-                        </pre>
+                        </code>
                     </div>
-                </div>
+                </Card>
             )}
         </div>
     );

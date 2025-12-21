@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Input, TabNav } from '../ui';
+import { Card, Button, Input, TabNav, PayloadBlock } from '../ui';
 import { ToolHeader } from '../ui/ToolHeader';
 import { Search, Copy, Check, Filter, Terminal } from 'lucide-react';
 
@@ -154,15 +154,16 @@ export default function SSTITool() {
                                 <div className="flex gap-2">
                                     <Button size="sm" variant="outline" onClick={() => copyEncoded(item.payload, 'url')}>URL</Button>
                                     <Button size="sm" variant="outline" onClick={() => copyEncoded(item.payload, 'base64')}>B64</Button>
-                                    <Button size="sm" variant="primary" onClick={() => copyToClipboard(item.payload)} icon={<Copy size={12} />}>Copy</Button>
+                                    {/* Copy is handled by PayloadBlock, but we might want extra formats. 
+                                        Actually PayloadBlock handles the main copy. 
+                                        But SSTITool has URL/B64 buttons too. 
+                                        I'll keep the buttons but replace the code display. */}
                                 </div>
                             </div>
 
                             <p className="text-sm text-gray-400">{item.desc}</p>
 
-                            <div className="bg-[#0d1117] rounded p-3 font-mono text-xs text-blue-300 break-all whitespace-pre-wrap">
-                                {item.payload}
-                            </div>
+                            <PayloadBlock content={item.payload} />
                         </div>
                     </Card>
                 ))}

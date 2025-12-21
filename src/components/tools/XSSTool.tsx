@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, TextArea, Button, Select, Tabs } from '../ui';
+import { Card, TextArea, Button, Select, Tabs, PayloadBlock } from '../ui';
 import { Copy, Check, ShieldAlert, Code } from 'lucide-react';
 
 // --- Components for Internal Tabs ---
@@ -44,21 +44,9 @@ const XSSPayloads = () => {
             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 border-b border-white/10 pb-2">
                 {title}
             </h3>
-            <div className="space-y-2">
-                {payloads.map((p, i) => (
-                    <div key={i} className="group relative">
-                        <pre className="bg-[#0d1117] border border-white/10 rounded-lg p-3 text-sm text-green-400 font-mono overflow-x-auto">
-                            {p.title}
-                        </pre>
-                        <button
-                            onClick={() => navigator.clipboard.writeText(p.title)}
-                            className="absolute right-2 top-2 p-1.5 bg-[#a2ff00]/10 text-[#a2ff00] rounded opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                            <Copy size={14} />
-                        </button>
-                    </div>
-                ))}
-            </div>
+            <PayloadBlock
+                content={payloads.map(p => p.title).join('\n')}
+            />
         </div>
     );
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Input, TabNav } from '../ui';
+import { Card, Button, Input, TabNav, PayloadBlock } from '../ui';
 import { ToolHeader } from '../ui/ToolHeader';
 import { FileCode, Copy, Check, Info, Settings } from 'lucide-react';
 
@@ -141,25 +141,11 @@ export default function XXETool() {
                     return (
                         <Card key={idx} className="!p-4 hover:border-htb-green/50 transition-colors">
                             <div className="flex flex-col gap-3">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <h4 className="text-sm font-bold text-htb-green">{item.name}</h4>
-                                        <p className="text-xs text-gray-400">{item.desc}</p>
-                                    </div>
-                                    <Button
-                                        size="sm"
-                                        variant="primary"
-                                        onClick={() => copyToClipboard(finalPayload)}
-                                        icon={<Copy size={12} />}
-                                    >
-                                        Copy
-                                    </Button>
+                                <div>
+                                    <h4 className="text-sm font-bold text-htb-green">{item.name}</h4>
+                                    <p className="text-xs text-gray-400">{item.desc}</p>
                                 </div>
-                                <div className="bg-[#0d1117] rounded p-3">
-                                    <pre className="text-xs text-blue-300 font-mono break-all whitespace-pre-wrap">
-                                        {finalPayload}
-                                    </pre>
-                                </div>
+                                <PayloadBlock content={finalPayload} />
                             </div>
                         </Card>
                     );

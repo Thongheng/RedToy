@@ -1,5 +1,6 @@
 import React from 'react';
-import { Copy, Download } from 'lucide-react';
+import { Copy } from 'lucide-react';
+import { Card, Button, TextArea, Input, Select } from '../ui';
 
 const JWTTool: React.FC = () => {
     const [rawToken, setRawToken] = React.useState('');
@@ -56,70 +57,64 @@ const JWTTool: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">JWT Token</label>
-                    <textarea
-                        value={rawToken}
-                        onChange={(e) => setRawToken(e.target.value)}
-                        className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white font-mono text-sm h-32 focus:border-[#a2ff00]/50 focus:outline-none"
-                        placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ..."
+                <TextArea
+                    label="JWT Token"
+                    value={rawToken}
+                    onChange={(e) => setRawToken(e.target.value)}
+                    className="h-32"
+                    placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ..."
+                />
+
+                <div className="grid grid-cols-2 gap-4">
+                    <Input
+                        label="Secret Key"
+                        type="text"
+                        value={secretKey}
+                        onChange={(e) => setSecretKey(e.target.value)}
+                        placeholder="your-secret-key"
+                    />
+                    <Select
+                        label="Algorithm"
+                        value={alg}
+                        onChange={setAlg}
+                        options={[
+                            { value: 'HS256', label: 'HS256' },
+                            { value: 'none', label: 'None (Attack)' },
+                        ]}
                     />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Secret Key</label>
-                        <input
-                            type="text"
-                            value={secretKey}
-                            onChange={(e) => setSecretKey(e.target.value)}
-                            className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white text-sm focus:border-[#a2ff00]/50 focus:outline-none"
-                            placeholder="your-secret-key"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Algorithm</label>
-                        <select
-                            value={alg}
-                            onChange={(e) => setAlg(e.target.value)}
-                            className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white text-sm focus:border-[#a2ff00]/50 focus:outline-none"
-                        >
-                            <option value="HS256">HS256</option>
-                            <option value="none">None (Attack)</option>
-                        </select>
-                    </div>
-                </div>
-
                 {alg === 'none' && noneAlgToken && (
-                    <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+                    <Card className="bg-red-500/10 border-red-500/20">
                         <div className="flex items-center justify-between mb-2">
                             <span className="text-sm font-medium text-red-400">JWT without Signature (None Attack)</span>
-                            <button
+                            <Button
+                                size="sm"
+                                variant="outline"
                                 onClick={() => handleCopy(noneAlgToken)}
-                                className="text-red-400 hover:text-red-300 transition-colors"
-                            >
-                                <Copy size={16} />
-                            </button>
+                                icon={<Copy size={16} />}
+                                className="text-red-400 border-red-400 hover:bg-red-500/10"
+                            />
                         </div>
                         <code className="text-xs text-red-300 break-all block">{noneAlgToken}</code>
-                    </div>
+                    </Card>
                 )}
 
                 <div>
                     <div className="flex items-center justify-between mb-2">
                         <label className="text-sm font-medium text-gray-300">Header (Algorithm & Token Type)</label>
-                        <button
+                        <Button
+                            size="sm"
+                            variant="ghost"
                             onClick={() => handleCopy(header)}
-                            className="text-gray-400 hover:text-white transition-colors"
                             disabled={!header}
-                        >
-                            <Copy size={16} />
-                        </button>
+                            icon={<Copy size={16} />}
+                        />
                     </div>
-                    <textarea
+                    <TextArea
                         value={header}
                         readOnly
-                        className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-[#a2ff00] font-mono text-sm h-24"
+                        className="h-24 text-[#a2ff00]"
                         placeholder='{\n  "alg": "HS256",\n  "typ": "JWT"\n}'
                     />
                 </div>
@@ -127,18 +122,18 @@ const JWTTool: React.FC = () => {
                 <div>
                     <div className="flex items-center justify-between mb-2">
                         <label className="text-sm font-medium text-gray-300">Payload (JWT Claims)</label>
-                        <button
+                        <Button
+                            size="sm"
+                            variant="ghost"
                             onClick={() => handleCopy(payload)}
-                            className="text-gray-400 hover:text-white transition-colors"
                             disabled={!payload}
-                        >
-                            <Copy size={16} />
-                        </button>
+                            icon={<Copy size={16} />}
+                        />
                     </div>
-                    <textarea
+                    <TextArea
                         value={payload}
                         readOnly
-                        className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-[#a2ff00] font-mono text-sm h-48"
+                        className="h-48 text-[#a2ff00]"
                         placeholder='{\n  "sub": "1234567890",\n  "name": "John Doe",\n  "iat": 1516239022\n}'
                     />
                 </div>

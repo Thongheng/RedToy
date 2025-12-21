@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Copy, Check, Download, ExternalLink } from 'lucide-react';
+import { Card, Button, Input } from '../ui';
 import { useClipboard } from '../../hooks/useClipboard';
 
 export default function WebShellTool() {
@@ -132,23 +133,23 @@ function printit ($string) {
             <h3 className="text-lg font-bold text-[#a2ff00] mb-2">{title}</h3>
             {description && <p className="text-sm text-gray-400 mb-3">{description}</p>}
             <div className="htb-terminal-content mb-3">
-                <pre className="font-mono text-xs text-gray-300 whitespace-pre-wrap">{shell}</pre>
+                <code className="text-xs text-blue-300 font-mono break-all">{shell}</code>
             </div>
             <div className="flex gap-3">
-                <button
+                <Button
+                    variant="primary"
                     onClick={() => handleDownload(shell, filename)}
-                    className="flex items-center gap-2 px-4 py-2 rounded bg-[#a2ff00] hover:bg-[#8dd900] text-[#05080d] text-sm font-bold transition-colors"
+                    icon={<Download size={16} />}
                 >
-                    <Download size={16} />
                     Download
-                </button>
-                <button
+                </Button>
+                <Button
+                    variant="secondary"
                     onClick={() => handleCopy(shell, filename)}
-                    className="flex items-center gap-2 px-4 py-2 rounded bg-white/5 hover:bg-white/10 text-gray-300 text-sm font-bold transition-colors"
+                    icon={copiedId === filename ? <Check size={16} className="text-[#a2ff00]" /> : <Copy size={16} />}
                 >
-                    {copiedId === filename ? <Check size={16} className="text-[#a2ff00]" /> : <Copy size={16} />}
                     {copiedId === filename ? 'Copied!' : 'Copy'}
-                </button>
+                </Button>
             </div>
         </div>
     );
@@ -165,34 +166,28 @@ function printit ($string) {
             </div>
 
             {/* PHP Reverse Shell with inputs */}
-            <div className="htb-card mb-6">
+            <Card className="mb-6">
                 <h3 className="text-lg font-bold text-[#a2ff00] mb-3">PHP Reverse Shell</h3>
                 <p className="text-sm text-gray-400 mb-4">
                     This script will make an outbound TCP connection to a hardcoded IP and port.
                 </p>
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label className="block text-xs font-bold text-gray-400 mb-1">IP Address</label>
-                        <input
-                            type="text"
-                            value={values.ip}
-                            onChange={handleChange('ip')}
-                            placeholder="212.212.111.222"
-                            className="htb-input w-full"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-bold text-gray-400 mb-1">Port</label>
-                        <input
-                            type="text"
-                            value={values.port}
-                            onChange={handleChange('port')}
-                            placeholder="1337"
-                            maxLength={5}
-                            className="htb-input w-full"
-                        />
-                    </div>
+                    <Input
+                        label="IP Address"
+                        type="text"
+                        value={values.ip}
+                        onChange={handleChange('ip')}
+                        placeholder="212.212.111.222"
+                    />
+                    <Input
+                        label="Port"
+                        type="text"
+                        value={values.port}
+                        onChange={handleChange('port')}
+                        placeholder="1337"
+                        maxLength={5}
+                    />
                 </div>
 
                 <div className="htb-terminal-content mb-3">
@@ -200,20 +195,20 @@ function printit ($string) {
                 </div>
 
                 <div className="flex gap-3">
-                    <button
+                    <Button
+                        variant="primary"
                         onClick={() => handleDownload(phpReverseShell, 'rev.php')}
-                        className="flex items-center gap-2 px-4 py-2 rounded bg-[#a2ff00] hover:bg-[#8dd900] text-[#05080d] text-sm font-bold transition-colors"
+                        icon={<Download size={16} />}
                     >
-                        <Download size={16} />
                         Download
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        variant="secondary"
                         onClick={() => handleCopy(phpReverseShell, 'reverse-shell')}
-                        className="flex items-center gap-2 px-4 py-2 rounded bg-white/5 hover:bg-white/10 text-gray-300 text-sm font-bold transition-colors"
+                        icon={copiedId === 'reverse-shell' ? <Check size={16} className="text-[#a2ff00]" /> : <Copy size={16} />}
                     >
-                        {copiedId === 'reverse-shell' ? <Check size={16} className="text-[#a2ff00]" /> : <Copy size={16} />}
                         {copiedId === 'reverse-shell' ? 'Copied!' : 'Copy'}
-                    </button>
+                    </Button>
                     <a
                         href="https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php"
                         target="_blank"
@@ -224,7 +219,7 @@ function printit ($string) {
                         Pentestmonkey Repo
                     </a>
                 </div>
-            </div>
+            </Card>
 
             <div className="space-y-8">
                 <ShellSection
@@ -269,7 +264,7 @@ function printit ($string) {
                     description="Usage: http://target.com/path/to/shell.php?_=system&__=ls"
                 />
 
-                <div className="htb-card">
+                <Card>
                     <h3 className="text-lg font-bold text-[#a2ff00] mb-2">p0wny@shell</h3>
                     <p className="text-sm text-gray-400 mb-3">
                         p0wny@shell:~# is a very basic, single-file, PHP shell. It can be used
@@ -279,7 +274,7 @@ function printit ($string) {
                         <a
                             href="https://raw.githubusercontent.com/flozz/p0wny-shell/master/shell.php"
                             target="_blank"
-                            rel="noopener noreferrer"
+                            rel="no opener noreferrer"
                             className="flex items-center gap-2 px-4 py-2 rounded bg-[#a2ff00] hover:bg-[#8dd900] text-[#05080d] text-sm font-bold transition-colors"
                         >
                             <Download size={16} />
@@ -295,7 +290,7 @@ function printit ($string) {
                             Flozz's Repository
                         </a>
                     </div>
-                </div>
+                </Card>
             </div>
         </div>
     );

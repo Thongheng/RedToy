@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, TabNav } from '../ui';
+import { Card, Button, TabNav, PayloadBlock } from '../ui';
 import { FolderOpen, Copy, Check } from 'lucide-react';
 
 export default function PathTraversalTool() {
@@ -135,26 +135,12 @@ Prevention:
                         Common LFI/RFI payloads for directory traversal and file inclusion attacks
                     </p>
                     {LFI_PAYLOADS.map((section, idx) => (
-                        <Card key={idx} className="!p-6 space-y-3">
-                            <h3 className="text-sm font-bold text-htb-green uppercase tracking-wider">{section.category}</h3>
-                            <div className="space-y-2">
-                                {section.payloads.map((payload, pidx) => (
-                                    <div key={pidx} className={`flex items-center justify-between gap-2 rounded p-2 ${payload.startsWith('#') ? 'bg-yellow-500/10' : 'bg-[#0d1117]'}`}>
-                                        <code className={`text-xs flex-1 break-all font-mono ${payload.startsWith('#') ? 'text-yellow-400' : 'text-blue-300'}`}>
-                                            {payload}
-                                        </code>
-                                        {!payload.startsWith('#') && (
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                onClick={() => copyToClipboard(payload)}
-                                                icon={<Copy size={12} />}
-                                            />
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </Card>
+                        <div key={idx} className="mb-6">
+                            <PayloadBlock
+                                title={section.category}
+                                content={section.payloads}
+                            />
+                        </div>
                     ))}
                 </div>
             )}

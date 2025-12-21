@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Input, TabNav } from '../ui';
+import { Card, Button, Input, TabNav, PayloadBlock } from '../ui';
 import { ToolHeader } from '../ui/ToolHeader';
 import { Smartphone, Copy, Check, Info, Code, Terminal } from 'lucide-react';
 
@@ -152,46 +152,19 @@ export default function MobileHookingTool() {
             {/* Frida Tab */}
             {activeTab === 'frida' && (
                 <div className="space-y-4">
-                    {FRIDA_SCRIPTS.map((script, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between mb-2">
-                                <div>
-                                    <span className="text-sm font-bold text-htb-green">{script.name}</span>
-                                    <p className="text-xs text-gray-400">{script.desc}</p>
-                                </div>
-                                <Button size="sm" variant="outline" onClick={() => copyToClipboard(script.code)} icon={<Copy size={12} />} />
-                            </div>
-                            <div className="bg-[#0d1117] rounded p-3">
-                                <pre className="text-xs text-blue-300 font-mono break-all whitespace-pre-wrap">
-                                    {script.code}
-                                </pre>
-                            </div>
-                        </Card>
-                    ))}
+                    <PayloadBlock
+                        content={FRIDA_SCRIPTS.map(script => `/* ${script.name} - ${script.desc} */\n${script.code}`).join('\n\n')}
+                        language="javascript"
+                    />
                 </div>
             )}
 
             {/* Objection Tab */}
             {activeTab === 'objection' && (
-                <div className="space-y-3">
-                    {OBJECTION_COMMANDS.map((cmd, idx) => (
-                        <Card key={idx} className="!p-4">
-                            <div className="flex items-center justify-between gap-3">
-                                <div>
-                                    <span className="text-sm font-bold text-htb-green">{cmd.name}</span>
-                                    <div className="bg-[#0d1117] rounded p-2 mt-1">
-                                        <code className="text-xs text-blue-300 font-mono break-all">{cmd.cmd}</code>
-                                    </div>
-                                </div>
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => copyToClipboard(cmd.cmd)}
-                                    icon={<Copy size={12} />}
-                                />
-                            </div>
-                        </Card>
-                    ))}
+                <div className="space-y-4">
+                    <PayloadBlock
+                        content={OBJECTION_COMMANDS.map(cmd => `# ${cmd.name}\n${cmd.cmd}`).join('\n\n')}
+                    />
                 </div>
             )}
 

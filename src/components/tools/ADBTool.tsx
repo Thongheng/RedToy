@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Input, Select } from '../ui';
+import { Card, Button, Input, Select, PayloadBlock } from '../ui';
 import { Smartphone, Copy, Check, Wifi, Usb } from 'lucide-react';
 
 export default function ADBTool() {
@@ -121,29 +121,9 @@ export default function ADBTool() {
 
             {/* Command List */}
             <div className="space-y-3">
-                {ADB_COMMANDS.map((item, idx) => (
-                    <Card key={idx} className="!p-4">
-                        <div className="flex items-start justify-between gap-3">
-                            <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-sm font-bold text-htb-green">{item.name}</span>
-                                </div>
-                                <p className="text-xs text-gray-400 mb-2">{item.desc}</p>
-                                <div className="bg-[#0d1117] rounded p-3">
-                                    <code className="text-xs text-blue-300 font-mono break-all">
-                                        {formatCommand(item.cmd)}
-                                    </code>
-                                </div>
-                            </div>
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => copyToClipboard(formatCommand(item.cmd))}
-                                icon={<Copy size={12} />}
-                            />
-                        </div>
-                    </Card>
-                ))}
+                <PayloadBlock
+                    content={ADB_COMMANDS.map(item => `# ${item.name} - ${item.desc}\n${formatCommand(item.cmd)}`).join('\n\n')}
+                />
             </div>
 
             {/* Toast */}

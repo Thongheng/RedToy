@@ -100,88 +100,115 @@ export default function ToolsLayout({ globalInputs, searchQuery, clearSearch }: 
                         </div>
                     )}
                     <div className="space-y-1">
-                        {CATEGORY_ORDER.map(catKey => {
-                            const cat = CATEGORIES[catKey];
-                            if (!cat) return null;
-                            const isExpanded = expandedCategories.has(catKey);
-                            const subs = SUBCATEGORIES[catKey] || [];
-                            const Icon = cat.icon;
-                            // Check if current active category matches
-                            const isActive = category === catKey && !searchQuery;
-
-                            return (
-                                <div key={catKey}>
+                        {searchQuery ? (
+                            // Search Results View
+                            <div className="space-y-0.5">
+                                {filteredTools.map(tool => (
                                     <button
-                                        onClick={() => {
-                                            toggleCategory(catKey);
-                                            if (!searchQuery) navigate(`/tools/${catKey}`);
-                                        }}
-                                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${isActive
-                                            ? 'bg-[#a2ff00]/10 text-[#a2ff00] border border-[#a2ff00]/20'
-                                            : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'
+                                        key={tool.id}
+                                        onClick={() => handleToolSelect(tool.id, tool.category)}
+                                        className={`w-full text-left px-3 py-2 rounded text-xs font-medium transition-all cursor-pointer flex items-center justify-between ${currentTool?.id === tool.id
+                                            ? 'text-[#a2ff00] bg-[#a2ff00]/10'
+                                            : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'
                                             }`}
                                     >
-                                        <span className="flex items-center gap-2">
-                                            {Icon && <Icon size={16} />}
-                                            {cat.label}
-                                        </span>
-                                        {subs.length > 0 && (isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
+                                        <span>{tool.name}</span>
+                                        <span className="text-[10px] uppercase text-gray-600">{tool.category}</span>
                                     </button>
+                                ))}
+                            </div>
+                        ) : (
+                            // Category Tree View
+                            CATEGORY_ORDER.map(catKey => {
+                                const cat = CATEGORIES[catKey];
+                                if (!cat) return null;
+                                const isExpanded = expandedCategories.has(catKey);
+                                const subs = SUBCATEGORIES[catKey] || [];
+                                const Icon = cat.icon;
+                                // Check if current active category matches
+                                const isActive = category === catKey && !searchQuery;
 
-                                    {isExpanded && subs.length > 0 && (
-                                        <div className="ml-6 mt-1 space-y-0.5">
-                                            {subs.map(sub => {
-                                                // CRITICAL: Search ALL tools, not just filteredTools
-                                                // This allows navigating to WEB tools even when viewing RECON category
-                                                const firstToolInSub = TOOLS.find(t => t.category === catKey && t.subcategory === sub);
+                                return (
+                                    <div key={catKey}>
+                                        <button
+                                            onClick={() => {
+                                                toggleCategory(catKey);
+                                                // If we have tools in this category, we could verify before nav
+                                                // But usually direct click opens the category view (empty?)
+                                                // Let's just toggle expand. If user wants to see tools, they are now inside.
+                                                // The original behavior navigated to /tools/catKey. We can keep that.
+                                                if (!searchQuery) navigate(`/tools/${catKey}`);
+                                            }}
+                                            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${isActive
+                                                ? 'bg-[#a2ff00]/10 text-[#a2ff00] border border-[#a2ff00]/20'
+                                                : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'
+                                                }`}
+                                        >
+                                            <span className="flex items-center gap-2">
+                                                {Icon && <Icon size={16} />}
+                                                {cat.label}
+                                            </span>
+                                            {subs.length > 0 && (isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
+                                        </button>
 
-                                                return (
-                                                    <button
-                                                        key={sub}
-                                                        onClick={() => {
-                                                            if (firstToolInSub) {
-                                                                navigate(`/tools/${catKey}/${firstToolInSub.id}`);
-                                                            } else {
-                                                                // Show toast when no tool found
-                                                                setShowNoToolToast(true);
-                                                                setTimeout(() => setShowNoToolToast(false), 3000);
-                                                            }
-                                                        }}
-                                                        className={`w-full text-left px-3 py-1.5 rounded text-xs font-medium transition-all cursor-pointer ${currentTool?.subcategory === sub
-                                                            ? 'text-[#a2ff00] bg-[#a2ff00]/10'
-                                                            : 'text-gray-500 hover:text-gray-300'
-                                                            }`}
-                                                    >
-                                                        {sub}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })}
+                                        {isExpanded && subs.length > 0 && (
+                                            <div className="ml-4 mt-1 space-y-0.5">
+                                                {subs.map(sub => {
+                                                    // Find all tools for this subcategory
+                                                    const subTools = TOOLS.filter(t => t.category === catKey && t.subcategory === sub);
+                                                    if (subTools.length === 0) return null;
+
+                                                    // Check if current tool belongs to this subcategory
+                                                    const isActiveSubcategory = currentTool?.category === catKey && currentTool?.subcategory === sub;
+
+                                                    return (
+                                                        <button
+                                                            key={sub}
+                                                            onClick={() => {
+                                                                // Navigate to first tool in subcategory
+                                                                const firstTool = subTools[0];
+                                                                if (firstTool) {
+                                                                    navigate(`/tools/${catKey}/${firstTool.id}`);
+                                                                }
+                                                            }}
+                                                            className={`w-full text-left px-3 py-2 rounded text-xs font-medium transition-all cursor-pointer ${isActiveSubcategory
+                                                                ? 'text-[#a2ff00] bg-[#a2ff00]/10 border-l-2 border-[#a2ff00] pl-2'
+                                                                : 'text-gray-500 hover:text-gray-300 hover:bg-white/5 border-l-2 border-transparent pl-2'
+                                                                }`}
+                                                        >
+                                                            {sub}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })
+                        )}
                     </div>
                 </div>
             </aside>
 
             {/* Content Area */}
             <div className="flex-1 flex flex-col overflow-hidden">
-                {/* Tool Tabs (Filtered View) */}
-                {filteredTools.length > 0 && (
+                {/* Tool Tabs - Show tools within current subcategory */}
+                {currentTool?.subcategory && category && (
                     <div className="border-b border-white/5 bg-[#0d1117]/30 px-6 py-3 flex items-center gap-2 overflow-x-auto">
-                        {filteredTools.map(tool => (
-                            <button
-                                key={tool.id}
-                                onClick={() => handleToolSelect(tool.id, tool.category)}
-                                className={`px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${toolId === tool.id
-                                    ? 'bg-[#a2ff00] text-[#05080d]'
-                                    : 'bg-[#1a1f28] text-gray-400 hover:bg-[#252a35] hover:text-white border border-white/5'
-                                    }`}
-                            >
-                                {tool.name}
-                            </button>
-                        ))}
+                        {TOOLS
+                            .filter(t => t.category === category && t.subcategory === currentTool.subcategory)
+                            .map(tool => (
+                                <button
+                                    key={tool.id}
+                                    onClick={() => handleToolSelect(tool.id, tool.category)}
+                                    className={`px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${toolId === tool.id
+                                        ? 'bg-[#a2ff00] text-[#05080d]'
+                                        : 'bg-[#1a1f28] text-gray-400 hover:bg-[#252a35] hover:text-white border border-white/5'
+                                        }`}
+                                >
+                                    {tool.name}
+                                </button>
+                            ))}
                     </div>
                 )}
 

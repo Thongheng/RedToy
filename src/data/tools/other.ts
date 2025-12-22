@@ -5,7 +5,7 @@ export const OTHER_TOOLS: Tool[] = [
     {
         id: 'scp',
         name: 'SCP',
-        category: 'OTHER',
+        category: 'UTILITIES',
         subcategory: 'File Transfer',
         desc: 'Secure copy (remote file copy program).',
         authMode: 'required',
@@ -16,7 +16,7 @@ export const OTHER_TOOLS: Tool[] = [
     {
         id: 'bash',
         name: 'Bash',
-        category: 'OTHER',
+        category: 'UTILITIES',
         subcategory: 'File Transfer',
         desc: 'Bash built-in file transfer',
         authMode: 'none',
@@ -33,7 +33,7 @@ nc -q 0 ${v.target || '$TARGET'} 8000 > ${v.filepath || '$FILEPATH'}`;
     {
         id: 'impacket-smb',
         name: 'Impacket SMB Server',
-        category: 'OTHER',
+        category: 'UTILITIES',
         subcategory: 'File Transfer',
         desc: 'Impacket SMB Server for file sharing.',
         authMode: 'none',

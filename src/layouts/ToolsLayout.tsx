@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ChevronDown, ChevronRight, AlertCircle, Copy, Settings as SettingsIcon } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { TOOLS } from '../data/tools';
-import { CATEGORIES, SUBCATEGORIES, CATEGORY_ORDER } from '../data/categories';
+import { CATEGORIES, SUBCATEGORIES } from '../data/categories';
 import ToolRenderer from '../components/tools/ToolRenderer';
 import type { GlobalInputs } from '../types';
 
@@ -117,74 +117,46 @@ export default function ToolsLayout({ globalInputs, searchQuery, clearSearch }: 
                                     </button>
                                 ))}
                             </div>
-                        ) : (
-                            // Category Tree View
-                            CATEGORY_ORDER.map(catKey => {
-                                const cat = CATEGORIES[catKey];
-                                if (!cat) return null;
-                                const isExpanded = expandedCategories.has(catKey);
-                                const subs = SUBCATEGORIES[catKey] || [];
-                                const Icon = cat.icon;
-                                // Check if current active category matches
-                                const isActive = category === catKey && !searchQuery;
+                        ) : category ? (
+                            // Subcategory View for selected category
+                            <>
+                                {/* Category Header */}
+                                <div className="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-white/5 mb-2">
+                                    {CATEGORIES[category]?.label || category}
+                                </div>
 
-                                return (
-                                    <div key={catKey}>
+                                {/* Subcategories */}
+                                {(SUBCATEGORIES[category] || []).map(sub => {
+                                    const subTools = TOOLS.filter(t => t.category === category && t.subcategory === sub);
+                                    if (subTools.length === 0) return null;
+
+                                    const isActiveSubcategory = currentTool?.category === category && currentTool?.subcategory === sub;
+
+                                    return (
                                         <button
+                                            key={sub}
                                             onClick={() => {
-                                                toggleCategory(catKey);
-                                                // If we have tools in this category, we could verify before nav
-                                                // But usually direct click opens the category view (empty?)
-                                                // Let's just toggle expand. If user wants to see tools, they are now inside.
-                                                // The original behavior navigated to /tools/catKey. We can keep that.
-                                                if (!searchQuery) navigate(`/tools/${catKey}`);
+                                                const firstTool = subTools[0];
+                                                if (firstTool) {
+                                                    navigate(`/tools/${category}/${firstTool.id}`);
+                                                }
                                             }}
-                                            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${isActive
-                                                ? 'bg-[#a2ff00]/10 text-[#a2ff00] border border-[#a2ff00]/20'
-                                                : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'
+                                            className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center justify-between ${isActiveSubcategory
+                                                ? 'text-[#a2ff00] bg-[#a2ff00]/10 border border-[#a2ff00]/20'
+                                                : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
                                                 }`}
                                         >
-                                            <span className="flex items-center gap-2">
-                                                {Icon && <Icon size={16} />}
-                                                {cat.label}
-                                            </span>
-                                            {subs.length > 0 && (isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
+                                            <span>{sub}</span>
+                                            <span className="text-xs text-gray-600">{subTools.length}</span>
                                         </button>
-
-                                        {isExpanded && subs.length > 0 && (
-                                            <div className="ml-4 mt-1 space-y-0.5">
-                                                {subs.map(sub => {
-                                                    // Find all tools for this subcategory
-                                                    const subTools = TOOLS.filter(t => t.category === catKey && t.subcategory === sub);
-                                                    if (subTools.length === 0) return null;
-
-                                                    // Check if current tool belongs to this subcategory
-                                                    const isActiveSubcategory = currentTool?.category === catKey && currentTool?.subcategory === sub;
-
-                                                    return (
-                                                        <button
-                                                            key={sub}
-                                                            onClick={() => {
-                                                                // Navigate to first tool in subcategory
-                                                                const firstTool = subTools[0];
-                                                                if (firstTool) {
-                                                                    navigate(`/tools/${catKey}/${firstTool.id}`);
-                                                                }
-                                                            }}
-                                                            className={`w-full text-left px-3 py-2 rounded text-xs font-medium transition-all cursor-pointer ${isActiveSubcategory
-                                                                ? 'text-[#a2ff00] bg-[#a2ff00]/10 border-l-2 border-[#a2ff00] pl-2'
-                                                                : 'text-gray-500 hover:text-gray-300 hover:bg-white/5 border-l-2 border-transparent pl-2'
-                                                                }`}
-                                                        >
-                                                            {sub}
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                    </div>
-                                );
-                            })
+                                    );
+                                })}
+                            </>
+                        ) : (
+                            // No category selected - show prompt
+                            <div className="px-3 py-4 text-center text-gray-500 text-sm">
+                                Select a category from the top navigation
+                            </div>
                         )}
                     </div>
                 </div>

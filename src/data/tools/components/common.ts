@@ -9,8 +9,8 @@ export const COMMON_TOOLS: Tool[] = [
     {
         id: 'revshell',
         name: 'Reverse Shell Generator',
-        category: 'EXPLOIT',
-        subcategory: 'Reverse Shell',
+        category: 'WEB',
+        subcategory: 'Shells & Payloads',
         desc: 'Generate reverse shell payloads for 56+ languages and platforms (bash, python, powershell, nc, java, etc.)',
         authMode: 'none',
         generate: () => '',
@@ -20,8 +20,8 @@ export const COMMON_TOOLS: Tool[] = [
     {
         id: 'msfvenom_builder',
         name: 'MSFVenom Builder',
-        category: 'EXPLOIT',
-        subcategory: 'Payloads',
+        category: 'WEB',
+        subcategory: 'Shells & Payloads',
         desc: 'Interactive MSFVenom payload generator with visual interface. Configure payload, encoder, format, and more.',
         authMode: 'none',
         generate: () => '',
@@ -31,7 +31,7 @@ export const COMMON_TOOLS: Tool[] = [
     {
         id: 'cve_research',
         name: 'CVE Research',
-        category: 'RECON',
+        category: 'UTILITIES',
         subcategory: 'Vulnerability Research',
         desc: 'Search Common Vulnerabilities and Exposures (CVEs) with CVSS scoring and detailed information.',
         authMode: 'none',
@@ -42,7 +42,7 @@ export const COMMON_TOOLS: Tool[] = [
     {
         id: 'nmap_parser',
         name: 'Nmap Report Parser',
-        category: 'RECON',
+        category: 'UTILITIES',
         subcategory: 'Network Scanning',
         desc: 'Upload and parse Nmap XML scan results with sortable/filterable table view.',
         authMode: 'none',

@@ -44,46 +44,76 @@ function App() {
             <div className="relative z-10 flex flex-col min-h-screen">
                 {/* Navbar */}
                 <nav className="sticky top-0 z-50 bg-[#05080d]/95 backdrop-blur-md border-b border-white/5">
-                    <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-                        <div className="flex items-center gap-3 cursor-pointer" onClick={() => { navigate('/'); clearSearch(); }}>
-                            <div className="w-10 h-10 rounded-lg bg-[#a2ff00]/10 border border-[#a2ff00]/30 flex items-center justify-center">
-                                <svg className="w-6 h-6 text-[#a2ff00]" viewBox="0 0 24 24" fill="currentColor">
+                    <div className="w-full px-6 py-3 flex items-center justify-between">
+                        {/* Logo - Left */}
+                        <div className="flex items-center gap-3 cursor-pointer flex-shrink-0" onClick={() => { navigate('/'); clearSearch(); }}>
+                            <div className="w-9 h-9 rounded-lg bg-[#a2ff00]/10 border border-[#a2ff00]/30 flex items-center justify-center">
+                                <svg className="w-5 h-5 text-[#a2ff00]" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                                 </svg>
                             </div>
-                            <div className="flex items-baseline gap-1.5">
-                                <span className="text-xl font-black tracking-tighter">HackToy</span>
-                            </div>
+                            <span className="text-lg font-black tracking-tighter hidden sm:block">HackToy</span>
                         </div>
 
-                        <div className="flex items-center gap-6">
+                        {/* Center Navigation */}
+                        <div className="flex items-center gap-1 mx-4">
                             <button
-                                onClick={() => navigate('/tools')}
-                                className={`font-bold text-sm transition-colors ${location.pathname.startsWith('/tools') ? 'text-[#a2ff00]' : 'text-gray-400 hover:text-white'}`}
+                                onClick={() => navigate('/tools/WEB/xss_payloads')}
+                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${location.pathname.includes('/tools/WEB') ? 'bg-[#a2ff00]/10 text-[#a2ff00]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
                             >
-                                Tools
+                                Web
                             </button>
                             <button
+                                onClick={() => navigate('/tools/WINDOWS/powershell_commands')}
+                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${location.pathname.includes('/tools/WINDOWS') ? 'bg-[#a2ff00]/10 text-[#a2ff00]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
+                            >
+                                Windows
+                            </button>
+                            <button
+                                onClick={() => navigate('/tools/LINUX/linux_enumeration')}
+                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${location.pathname.includes('/tools/LINUX') ? 'bg-[#a2ff00]/10 text-[#a2ff00]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
+                            >
+                                Linux
+                            </button>
+                            <button
+                                onClick={() => navigate('/tools/MOBILE/adb_commands')}
+                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${location.pathname.includes('/tools/MOBILE') ? 'bg-[#a2ff00]/10 text-[#a2ff00]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
+                            >
+                                Mobile
+                            </button>
+                            <button
+                                onClick={() => navigate('/tools/UTILITIES/cve_research')}
+                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${location.pathname.includes('/tools/UTILITIES') ? 'bg-[#a2ff00]/10 text-[#a2ff00]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
+                            >
+                                Utilities
+                            </button>
+
+                            {/* Separator */}
+                            <div className="w-px h-5 bg-white/10 mx-2"></div>
+
+                            {/* Guides & References */}
+                            <button
                                 onClick={() => navigate('/guides')}
-                                className={`font-medium text-sm transition-colors ${location.pathname === '/guides' ? 'text-[#a2ff00]' : 'text-gray-400 hover:text-white'}`}
+                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/guides' ? 'bg-[#a2ff00]/10 text-[#a2ff00]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
                             >
                                 Guides
                             </button>
                             <button
                                 onClick={() => navigate('/references')}
-                                className={`font-medium text-sm transition-colors ${location.pathname === '/references' ? 'text-[#a2ff00]' : 'text-gray-400 hover:text-white'}`}
+                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/references' ? 'bg-[#a2ff00]/10 text-[#a2ff00]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
                             >
                                 References
                             </button>
                         </div>
 
-                        <div className="relative">
+                        {/* Search - Right */}
+                        <div className="relative flex-shrink-0">
                             <input
                                 type="text"
                                 placeholder="Search tools..."
                                 value={searchQuery}
                                 onChange={e => handleSearch(e.target.value)}
-                                className="bg-[#0d1117] border border-white/10 rounded-lg px-4 py-2 pl-10 text-sm w-64 focus:border-[#a2ff00]/50 focus:outline-none transition-colors"
+                                className="bg-[#0d1117] border border-white/10 rounded-lg px-4 py-2 pl-10 text-sm w-48 lg:w-64 focus:border-[#a2ff00]/50 focus:outline-none transition-colors"
                             />
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                             {searchQuery && (
